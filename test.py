@@ -1,21 +1,11 @@
 from stardb.storage import BlockFile
-from stardb.databases import SimpleSha256Database
+from stardb.databases import AssetDatabase
 
 if __name__ == '__main__':
     f = open('C:\\SSDSteam\\SteamApps\\common\\Starbound\\assets\\packed.pak', 'rb')
 
     bf = BlockFile(f)
-    db = SimpleSha256Database(bf, 'Assets1')
+    db = AssetDatabase(bf)
     db.open()
-    print(bf.getDebugInfo())
-    print(db.getDebugInfo())
-    
-    try:
-        db['_index']
-        print("Found")
-    except KeyError:
-        print("Not Found")
-
-# AssetsDatabaseBackend
-# _digest
-# _index
+    print(db.getFileList())
+    print(db['/weather/snow/snow.weather'])
