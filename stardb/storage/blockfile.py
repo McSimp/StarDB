@@ -1,5 +1,5 @@
 from io import BytesIO
-from stardb.storage.blockstorage import BlockStorage
+from stardb.storage import BlockStorage
 from stardb.util import unpack, bytesToString
 
 class BlockFile(BlockStorage):

@@ -1,4 +1,4 @@
-import bisect
+from bisect import bisect_left
 
 class LeafElement:
     def __init__(self, k, d):
@@ -18,7 +18,7 @@ class LeafNode:
         self.elements = [] # Note: This list must be sorted by key
 
     def findData(self, key):
-        i = bisect.bisect_left(self.elements, LeafElement(key, None))
+        i = bisect_left(self.elements, LeafElement(key, None))
         if i != len(self.elements) and self.elements[i].key == key:
             return self.elements[i].data
         raise KeyError

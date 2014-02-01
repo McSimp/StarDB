@@ -1,4 +1,4 @@
-import bisect
+from bisect import bisect_left
 
 class IndexElement:
     def __init__(self, k, p):
@@ -22,7 +22,7 @@ class IndexNode:
     # not in the index - it'll return the position where it should be inserted. This is
     # used internally to figure out which branch of the tree to go down.
     def find(self, key):
-        i = bisect.bisect_left(self.pointers, IndexElement(key, None))
+        i = bisect_left(self.pointers, IndexElement(key, None))
         if i != len(self.pointers) and self.pointers[i].key == key:
             return i + 1
         else:
