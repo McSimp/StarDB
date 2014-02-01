@@ -18,14 +18,15 @@ class IndexNode:
         self.beginPointer = None
         self.pointers = [] # Note: This list must be sorted by key
 
-    def findPointer(self, key):
+    # Note: This will not return the location of the key's IndexElement if the key is
+    # not in the index - it'll return the position where it should be inserted. This is
+    # used internally to figure out which branch of the tree to go down.
+    def find(self, key):
         i = bisect.bisect_left(self.pointers, IndexElement(key, None))
         if i != len(self.pointers) and self.pointers[i].key == key:
-            return self.pointers[i].pointer
-        raise KeyError
-
-    def __getitem__(self, key):
-        return self.findPointer(key)
+            return i + 1
+        else:
+            return i
 
     def size(self):
         if self.beginPointer is not None:

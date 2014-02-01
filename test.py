@@ -25,18 +25,6 @@ class SimpleDatabase(BTreeDatabase):
 
 glblIndex = hashlib.sha256('_index'.encode('utf-8')).digest()
 
-class Visitor:
-    def visitLeaf(self, leaf):
-        #print('Visiting leaf', leaf.selfPointer)
-        for elem in leaf.elements:
-            if elem.key == glblIndex:
-                print(leaf.selfPointer)
-                print(len(elem.data))
-
-
-    def visitIndex(self, index):
-        pass
-
 if __name__ == '__main__':
     f = open('C:\\SSDSteam\\SteamApps\\common\\Starbound\\assets\\packed.pak', 'rb')
 
@@ -45,4 +33,9 @@ if __name__ == '__main__':
     db.open()
     print(bf.getDebugInfo())
     print(db.getDebugInfo())
-    db.forAllNodes(Visitor())
+    
+    try:
+        db[glblIndex]
+        print("Found")
+    except KeyError:
+        print("Not Found")

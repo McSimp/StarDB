@@ -75,9 +75,9 @@ class BlockFile(BlockStorage):
         if not noFreeIndexBlock:
             self.headFreeIndexBlock = unpack('>i', f.read(4))
 
-        # I think if noFreeIndexBlock == True then we need recovery
+        # TODO: I think if noFreeIndexBlock == True then we need recovery
 
-        # Calculate file size - TODO: Hopefully this doesn't read in the file
+        # Calculate file size
         f.seek(0, 2)
         fileSize = f.tell()
 

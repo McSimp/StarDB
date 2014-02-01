@@ -1,3 +1,4 @@
+from stardb.btree.btree import BTree
 from stardb.btree.indexnode import IndexNode
 from stardb.btree.leafnode import LeafNode
 from stardb.util import unpack, bytesToString
@@ -40,20 +41,19 @@ class LeafInputStream:
                     if magic != BTreeDatabase.LeafMagic:
                         raise Exception('Incorrect leaf block signature')
                 else:
-                    raise Exception('')
+                    raise Exception('Insufficient leaf data')
 
         # TODO: This is probably an expensive copy
         return data.getvalue()
 
-class BTreeDatabase:
+class BTreeDatabase(BTree):
     FileIdentifier = 'BTreeDB4'
     IndexMagic = 'II'
     LeafMagic = 'LL'
 
     def __init__(self, blockStorage):
+        super().__init__()
         self.blockStorage = blockStorage
-        self.rootIsLeaf = False
-        self.rootPointer = None
         self.indexCache = {}
 
     def readRoot(self):
@@ -155,22 +155,6 @@ class BTreeDatabase:
 
         return leaf
 
-    # TODO: Remove these
-    def forAllNodesInIndex(self, index, visitor):
-        visitor.visitIndex(index)
-
-        for i in range(index.size()):
-            if index.level != 0:
-                self.forAllNodesInIndex(self.loadIndex(index.pointer(i)), visitor)
-            else:
-                visitor.visitLeaf(self.loadLeaf(index.pointer(i)))
-
-    def forAllNodes(self, visitor):
-        if not self.rootIsLeaf:
-            self.forAllNodesInIndex(self.loadIndex(self.rootPointer), visitor)
-        else:
-            visitor.visitLeaf(self.loadLeaf(self.rootPointer))
-
     def getDebugInfo(self):
         return 'Root Is Leaf: {0}\nRoot Pointer: {1}\nIndex Cache Size: {2}'.format(
                 self.rootIsLeaf,
@@ -179,13 +163,13 @@ class BTreeDatabase:
             )
 
     def getKeySize(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def getContentIdentifier(self):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def readKey(self, buff):
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def readData(self, buff):
-        raise NotImplementedError()
+        raise NotImplementedError
