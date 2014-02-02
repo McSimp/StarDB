@@ -6,8 +6,11 @@ class BlockFile(BlockStorage):
     HeaderMagic = 'SBBF02'
     PrefixHeaderSize = 32
 
-    def __init__(self, file):
-        self.file = file
+    def __init__(self, dataFile):
+        # We can pass in either a file object or a file path (string)
+        if type(dataFile) == str:
+            dataFile = open(dataFile, 'rb')
+        self.file = dataFile
         self.isOpen = False
         self.headerSize = 256
         self.headFreeIndexBlock = None

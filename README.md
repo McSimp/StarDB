@@ -21,10 +21,17 @@ contents of the `/weather/snow/snow.weather` key:
 from stardb.storage import BlockFile
 from stardb.databases import AssetDatabase
 
-bf = BlockFile(open('packed.pak', 'rb'))
+bf = BlockFile('packed.pak')
 db = AssetDatabase(bf)
 db.open()
 
 print(db.getFileList())
 print(db['/weather/snow/snow.weather'])
 ```
+
+## Current Issues
+
+There is a bug (or maybe a deliberate change) in the Starbound SHA256 
+implementation, which results in the hash for every 55 character string to be 
+incorrect. This means reading any file from an AssetsDatabase that has a 55 
+character file path will not work.

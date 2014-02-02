@@ -24,3 +24,12 @@ class AssetDatabase(SimpleSha256Database):
         # It's a Starbound string list, so parse it into our Python list
         self.fileList = unpackStringList(indexData)
         return self.fileList
+
+    # Since Starbound's SHA256 implementation is broken for 55 length strings,
+    # this function will get you a list of all files which can't be found.
+    def getBrokenFiles(self):
+        brokenFiles = []
+        for name in self.getFileList():
+            if len(name) == 55:
+                brokenFiles.append(name)
+        return brokenFiles

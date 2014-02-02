@@ -31,6 +31,23 @@ class BTree:
         else:
             return self.findInIndex(self.loadIndex(index.pointer(i)), key)
 
+    def getAllValues(self):
+        if not self.rootIsLeaf:
+            yield from self.getAllValuesFromIndex(self.loadIndex(self.rootPointer))
+        else:
+            yield from self.getAllValuesFromIndex(self.loadLeaf(self.rootPointer))
+
+    def getAllValuesFromIndex(self, index):
+        for i in range(index.size()):
+            if index.level != 0:
+                yield from self.getAllValuesFromIndex(self.loadIndex(index.pointer(i)))
+            else:
+                yield from self.getAllValuesFromLeaf(self.loadLeaf(index.pointer(i)))
+
+    def getAllValuesFromLeaf(self, leaf):
+        for element in leaf.elements:
+            yield element.key, element.data
+
     def loadLeaf(self, pointer):
         raise NotImplementedError
 

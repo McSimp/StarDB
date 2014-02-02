@@ -8,3 +8,6 @@ class SimpleSha256Database(SimpleDatabase):
     def find(self, key):
         digest =  sha256(key.encode('utf-8')).digest()
         return super().find(digest)
+
+    def findByHash(self, hash):
+        return super().find(hash)
